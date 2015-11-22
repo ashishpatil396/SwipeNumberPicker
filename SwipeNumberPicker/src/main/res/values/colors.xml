@@ -1,0 +1,11 @@
+<resources>
+
+    <color name="bg_btn_gray">#ececec</color>
+    <color name="arrows">#9B9B9B</color>
+
+    <color name="main_green">#259b24</color>
+
+    <color name="txt_gray_medium">#20000000</color>
+
+
+</resources>
