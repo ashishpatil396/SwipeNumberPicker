@@ -20,14 +20,15 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" />
 
-    <com.vi.swipenumberpicker.SwipeNumberPicker
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true" />
+    <!--<com.vi.swipenumberpicker.SwipeNumberPicker-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentRight="true" />-->
 
-    <com.vi.swipenumberpicker.SwipeNumberPicker
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true" />
+    <!--<com.vi.swipenumberpicker.SwipeNumberPicker-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--snp:arrowColor="@color/colorAccent" />-->
 </RelativeLayout>

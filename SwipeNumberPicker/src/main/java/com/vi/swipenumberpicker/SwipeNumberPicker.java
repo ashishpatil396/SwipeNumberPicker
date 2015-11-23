@@ -8,7 +8,6 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -31,21 +30,19 @@ public class SwipeNumberPicker extends TextView {
 
     private OnValueChangeListener mOnValueChangeListener;
 
+    private int mGestureStepPx;
     private float mStartX;
     private float mIntermediateX;
     private float mIntermediateValue;
-
-    private int mGestureStepPx;
     private int mPrimaryValue;
     private int mMinValue;
     private int mMaxValue;
+
     private int mArrowColor;
     private int mBackgroundColor;
     private int mActiveTextColor;
 
-    // Dialog data
-    private String mTitle = "";
-    private String mPositiveText;
+    private String mDialogTitle = "";
 
     private boolean mIsWasClick = false;
     private boolean mIsEnabled = true;
@@ -64,35 +61,54 @@ public class SwipeNumberPicker extends TextView {
     }
 
     private void init(Context context, AttributeSet attributeSet) {
-        TypedArray attrs = context.obtainStyledAttributes(attributeSet,
-                R.styleable.SwipeNumberPicker, 0, 0);
-
-        mPrimaryValue = attrs.getInteger(R.styleable.SwipeNumberPicker_value, 0);
-        mMinValue = attrs.getInteger(R.styleable.SwipeNumberPicker_min, -9999);
-        mMaxValue = attrs.getInteger(R.styleable.SwipeNumberPicker_max, 9999);
-        mArrowColor = attrs.getColor(R.styleable.SwipeNumberPicker_arrowColor, context.getResources().getColor(R.color.arrows));
-        mBackgroundColor = attrs.getColor(R.styleable.SwipeNumberPicker_backgroundColor, context.getResources().getColor(R.color.bg_btn_gray));
-        mActiveTextColor = attrs.getColor(R.styleable.SwipeNumberPicker_activeTextColor, context.getResources().getColor(R.color.main_green));
-        attrs.recycle();
+        initAttributes(context, attributeSet);
 
         Drawable left = getDrawable(R.drawable.ic_arrow_left);
         Drawable right = getDrawable(R.drawable.ic_arrow_right);
+
         setCompoundDrawablesWithIntrinsicBounds(left, null, right, null);
         setBackgroundResource(R.drawable.bg_btn_default);
-        customizeArrows(mArrowColor);
-        customizeBackground(mBackgroundColor);
 
         float scale = getResources().getDisplayMetrics().density;
         mGestureStepPx = (int) (GESTURE_STEP_DP * scale + 0.5f);
 
         float textWidth = new Paint().measureText(Integer.toString(mMaxValue)) + left.getBounds().width() * 1.5f;
-        int horizontalPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, context.getResources().getDisplayMetrics());
         setMinWidth((int) (textWidth * scale + 0.5f));
-        setGravity(Gravity.CENTER);
-        setPadding(0, horizontalPadding, 0, horizontalPadding);
-        mPositiveText = context.getString(android.R.string.ok);
+
         mIntermediateValue = mPrimaryValue;
         changeValue(mPrimaryValue);
+        customizeTextView();
+    }
+
+    private void initAttributes(Context context, AttributeSet attributeSet) {
+        TypedArray attrs = context.obtainStyledAttributes(attributeSet,
+                R.styleable.SwipeNumberPicker, 0, 0);
+        if (attrs != null) {
+            try {
+                mPrimaryValue = attrs.getInteger(R.styleable.SwipeNumberPicker_value, 0);
+                mMinValue = attrs.getInteger(R.styleable.SwipeNumberPicker_min, -9999);
+                mMaxValue = attrs.getInteger(R.styleable.SwipeNumberPicker_max, 9999);
+
+                mArrowColor = attrs.getColor(R.styleable.SwipeNumberPicker_arrowColor, context.getResources().getColor(R.color.arrows));
+                mBackgroundColor = attrs.getColor(R.styleable.SwipeNumberPicker_backgroundColor, context.getResources().getColor(R.color.background));
+                mActiveTextColor = attrs.getColor(R.styleable.SwipeNumberPicker_activeTextColor, context.getResources().getColor(R.color.text));
+            } finally {
+                attrs.recycle();
+            }
+        }
+
+    }
+
+    private void customizeTextView() {
+        // Padding
+        int horizontalPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getContext().getResources().getDisplayMetrics());
+        setPadding(0, horizontalPadding, 0, horizontalPadding);
+
+        setGravity(Gravity.CENTER);
+        setSingleLine(true);
+
+        setTextColor(mActiveTextColor);
+        setNormalBackground();
     }
 
     @Override
@@ -140,7 +156,6 @@ public class SwipeNumberPicker extends TextView {
                     mIntermediateValue += distance > 0 ? threshold : -threshold;
                     changeValue((int) mIntermediateValue);
                 }
-
                 mIntermediateX = currentX;
                 break;
 
@@ -209,9 +224,9 @@ public class SwipeNumberPicker extends TextView {
         numberPicker.setValue(mPrimaryValue);
         numberPicker.setWrapSelectorWheel(false);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        if (!mTitle.equals(""))
-            builder.setTitle(mTitle);
-        builder.setView(numberPicker).setPositiveButton(mPositiveText,
+        if (!mDialogTitle.equals(""))
+            builder.setTitle(mDialogTitle);
+        builder.setView(numberPicker).setPositiveButton(android.R.string.ok,
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -225,37 +240,39 @@ public class SwipeNumberPicker extends TextView {
     }
 
     private void setPressed(int distance) {
+        Log.d(TAG, "customizeTextView");
+
         highlightArrows(distance);
         highlightBackground();
     }
 
     private void setNormalBackground() {
-        customizeArrows(mArrowColor);
         customizeBackground(mBackgroundColor);
+        customizeArrows(mArrowColor);
     }
 
     private void customizeBackground(int color) {
-        getBackground().setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+        getBackground().setColorFilter(color, PorterDuff.Mode.MULTIPLY);
     }
 
     private void customizeArrows(int color) {
-        getCompoundDrawables()[0].setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
-        getCompoundDrawables()[2].setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.MULTIPLY));
+        getCompoundDrawables()[0].setColorFilter(color, PorterDuff.Mode.MULTIPLY);
+        getCompoundDrawables()[2].setColorFilter(color, PorterDuff.Mode.MULTIPLY);
     }
 
     private void highlightBackground() {
-        getBackground().setColorFilter(new PorterDuffColorFilter(darkenColor(mBackgroundColor), PorterDuff.Mode.MULTIPLY));
+        getBackground().setColorFilter(darkenColor(mBackgroundColor), PorterDuff.Mode.MULTIPLY);
     }
 
     private void highlightArrows(int distance) {
         if (distance < 0) {
             // Highlight right arrow
-            getCompoundDrawables()[0].setColorFilter(new PorterDuffColorFilter(darkenColor(mActiveTextColor), PorterDuff.Mode.MULTIPLY));
-            getCompoundDrawables()[2].setColorFilter(new PorterDuffColorFilter(mArrowColor, PorterDuff.Mode.MULTIPLY));
+            getCompoundDrawables()[0].setColorFilter(darkenColor(mArrowColor), PorterDuff.Mode.MULTIPLY);
+            getCompoundDrawables()[2].setColorFilter(mArrowColor, PorterDuff.Mode.MULTIPLY);
         } else {
             // Highlight left arrow
-            getCompoundDrawables()[0].setColorFilter(new PorterDuffColorFilter(mArrowColor, PorterDuff.Mode.MULTIPLY));
-            getCompoundDrawables()[2].setColorFilter(new PorterDuffColorFilter(darkenColor(mActiveTextColor), PorterDuff.Mode.MULTIPLY));
+            getCompoundDrawables()[0].setColorFilter(mArrowColor, PorterDuff.Mode.MULTIPLY);
+            getCompoundDrawables()[2].setColorFilter(darkenColor(mArrowColor), PorterDuff.Mode.MULTIPLY);
         }
     }
 
@@ -286,9 +303,9 @@ public class SwipeNumberPicker extends TextView {
     }
 
     private void disable() {
-        customizeArrows(darkenColor(mBackgroundColor));
+        customizeArrows(lightenColor(mBackgroundColor));
         customizeBackground(lightenColor(mBackgroundColor));
-        setTextColor(getContext().getResources().getColor(R.color.arrows));
+        setTextColor(lightenColor(mActiveTextColor));
     }
 
     private void enable() {
@@ -348,11 +365,7 @@ public class SwipeNumberPicker extends TextView {
     }
 
     public void setTitle(String title) {
-        mTitle = title;
-    }
-
-    public void setPositiveText(String positiveText) {
-        mPositiveText = positiveText;
+        mDialogTitle = title;
     }
 
     public void isShowNumberPickerDialog(boolean isShowNumberPickerDialog) {
