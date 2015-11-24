@@ -1,6 +1,6 @@
 <resources>
     <!--Default colors-->
     <color name="background">#dddddd</color>
-    <color name="arrows">#ff9800</color>
+    <color name="arrows">#303030</color>
     <color name="text">#8c000000</color>
 </resources>
