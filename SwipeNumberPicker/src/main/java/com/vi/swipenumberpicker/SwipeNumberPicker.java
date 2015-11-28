@@ -30,9 +30,11 @@ public class SwipeNumberPicker extends TextView {
 	private OnValueChangeListener mOnValueChangeListener;
 
 	private int mGestureStepPx;
+
 	private float mStartX;
 	private float mIntermediateX;
 	private float mIntermediateValue;
+
 	private int mPrimaryValue;
 	private int mMinValue;
 	private int mMaxValue;
@@ -219,9 +221,10 @@ public class SwipeNumberPicker extends TextView {
 				ViewGroup.LayoutParams.WRAP_CONTENT));
 
 		numberPicker.setMaxValue(mMaxValue);
-		numberPicker.setMinValue(0);
+		numberPicker.setMinValue(mMinValue > 0 ? mMinValue : 0);
 		numberPicker.setValue(mPrimaryValue);
 		numberPicker.setWrapSelectorWheel(false);
+
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 		if (!mDialogTitle.equals(""))
 			builder.setTitle(mDialogTitle);
@@ -338,13 +341,13 @@ public class SwipeNumberPicker extends TextView {
 		mOnValueChangeListener = valueChangeListener;
 	}
 
-	public int getValue() {
-		return mPrimaryValue;
-	}
-
 	private void setValue(int value) {
 		mPrimaryValue = value;
 		mIntermediateValue = value;
+	}
+
+	public int getValue() {
+		return mPrimaryValue;
 	}
 
 	public void setValue(int value, boolean isNotifyListener) {
@@ -362,7 +365,7 @@ public class SwipeNumberPicker extends TextView {
 		mMaxValue = maxValue;
 	}
 
-	public void setTitle(String title) {
+	public void setNumberPickerDialogTitle(String title) {
 		mDialogTitle = title;
 	}
 
