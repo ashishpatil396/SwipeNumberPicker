@@ -20,3 +20,17 @@ In layout:
 		snp:min="50"
 		snp:value="95"/>
 ```
+
+Attributes:
+
+``` xml
+		<attr name="min" format="integer"/>
+		<attr name="max" format="integer"/>
+		<attr name="value" format="integer"/>
+		<attr name="arrowColor" format="color"/>
+		<attr name="backgroundColor" format="color"/>
+		<attr name="numberColor" format="color"/>
+```
+
+In code:
+

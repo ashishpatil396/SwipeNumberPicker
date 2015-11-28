@@ -11,7 +11,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -71,8 +70,9 @@ public class SwipeNumberPicker extends TextView {
 		float scale = getResources().getDisplayMetrics().density;
 		mGestureStepPx = (int) (GESTURE_STEP_DP * scale + 0.5f);
 
-		float textWidth = new Paint().measureText(Integer.toString(mMaxValue)) + left.getBounds().width() * 1.5f;
-		setMinWidth((int) (textWidth * scale + 0.5f));
+		Paint textPaint = new Paint();
+		textPaint.setTextSize(getTextSize());
+		setMinWidth((int) (textPaint.measureText(Integer.toString(mMaxValue)) + left.getBounds().width() * 2));
 
 		mIntermediateValue = mPrimaryValue;
 		changeValue(mPrimaryValue);
@@ -90,16 +90,14 @@ public class SwipeNumberPicker extends TextView {
 
 				mArrowColor = attrs.getColor(R.styleable.SwipeNumberPicker_arrowColor, context.getResources().getColor(R.color.arrows));
 				mBackgroundColor = attrs.getColor(R.styleable.SwipeNumberPicker_backgroundColor, context.getResources().getColor(R.color.background));
-				mActiveTextColor = attrs.getColor(R.styleable.SwipeNumberPicker_activeTextColor, context.getResources().getColor(R.color.text));
+				mActiveTextColor = attrs.getColor(R.styleable.SwipeNumberPicker_numberColor, context.getResources().getColor(R.color.text));
 			} finally {
 				attrs.recycle();
 			}
 		}
-
 	}
 
 	private void customizeTextView() {
-		// Padding
 		int horizontalPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getContext().getResources().getDisplayMetrics());
 		setPadding(0, horizontalPadding, 0, horizontalPadding);
 
@@ -150,8 +148,6 @@ public class SwipeNumberPicker extends TextView {
 					} else {
 						threshold = 5;
 					}
-					Log.d(TAG, Double.toString(swipedDistance));
-					Log.d(TAG, Float.toString(threshold));
 					mIntermediateValue += distance > 0 ? threshold : -threshold;
 					changeValue((int) mIntermediateValue);
 				}
@@ -164,9 +160,7 @@ public class SwipeNumberPicker extends TextView {
 				setNormalBackground();
 
 				if (Math.abs(currentX - mStartX) <= mGestureStepPx) {
-					// Click occurred - show number picker dialog
 					processClick();
-					return false;
 				} else {
 					notifyListener((int) mIntermediateValue);
 				}
@@ -245,8 +239,6 @@ public class SwipeNumberPicker extends TextView {
 	}
 
 	private void setPressed(int distance) {
-		Log.d(TAG, "customizeTextView");
-
 		highlightArrows(distance);
 		highlightBackground();
 	}

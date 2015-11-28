@@ -29,5 +29,15 @@ public class MainActivity extends AppCompatActivity {
 				((SwipeNumberPicker) v).setValue(666, false);
 			}
 		});
+
+
+		((SwipeNumberPicker) findViewById(R.id.fff)).setOnValueChangeListener(new OnValueChangeListener() {
+			@Override
+			public boolean onValueChange(SwipeNumberPicker view, int oldValue, int newValue) {
+				return true;
+			}
+		});
+
+
 	}
 }

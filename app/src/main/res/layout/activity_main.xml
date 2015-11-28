@@ -20,7 +20,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_centerInParent="true"
-		snp:activeTextColor="@color/colorPrimaryDark"
+		snp:numberColor="@color/colorPrimaryDark"
 		snp:arrowColor="@color/colorPrimary"/>
 
 	<com.vi.swipenumberpicker.SwipeNumberPicker
@@ -29,12 +29,15 @@
 		android:layout_alignParentRight="true"/>
 
 	<com.vi.swipenumberpicker.SwipeNumberPicker
+		android:id="@+id/fff"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentBottom="true"
 		android:layout_alignParentLeft="true"
-		snp:activeTextColor="@android:color/white"
+		snp:numberColor="@android:color/white"
 		snp:arrowColor="@android:color/white"
 		snp:backgroundColor="@color/colorAccent"
-		snp:value="111"/>
+		snp:max="100"
+		snp:min="50"
+		snp:value="95"/>
 </RelativeLayout>
