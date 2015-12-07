@@ -13,10 +13,10 @@ In layout:
 	android:layout_height="wrap_content"
 	android:layout_alignParentBottom="true"
 	android:layout_alignParentLeft="true"
-	snp:activeTextColor="@android:color/white"
+	snp:numberColor="@android:color/white"
 	snp:arrowColor="@android:color/white"
 	snp:backgroundColor="@color/colorAccent"
-	snp:max="100"
+	snp:max="1000"
 	snp:min="50"
 	snp:value="95"/>
 ```
