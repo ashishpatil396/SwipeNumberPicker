@@ -18,14 +18,14 @@ public class MainActivity extends AppCompatActivity {
 		swipeNumberPicker.setOnValueChangeListener(new OnValueChangeListener() {
 			@Override
 			public boolean onValueChange(SwipeNumberPicker view, int oldValue, int newValue) {
-				return true;
+				return (newValue & 1) == 0;
 			}
 		});
 		swipeNumberPicker.setShowNumberPickerDialog(false);
 		swipeNumberPicker.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				((SwipeNumberPicker) v).setValue(5555, false);
+				((SwipeNumberPicker) v).setValue(0, false);
 			}
 		});
 

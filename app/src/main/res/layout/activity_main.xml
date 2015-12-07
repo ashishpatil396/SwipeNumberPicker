@@ -37,7 +37,7 @@
 		snp:numberColor="@android:color/white"
 		snp:arrowColor="@android:color/white"
 		snp:backgroundColor="@color/colorAccent"
-		snp:max="100"
+		snp:max="1000"
 		snp:min="50"
 		snp:value="95"/>
 </RelativeLayout>
