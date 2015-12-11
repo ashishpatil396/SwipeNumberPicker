@@ -3,6 +3,7 @@ package com.vi.swipenumberpicker.sample;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.TextView;
 
 import com.vi.swipenumberpicker.OnValueChangeListener;
 import com.vi.swipenumberpicker.SwipeNumberPicker;
@@ -14,24 +15,36 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		SwipeNumberPicker swipeNumberPicker = (SwipeNumberPicker) findViewById(R.id.number_picker_1);
+		SwipeNumberPicker swipeNumberPicker = (SwipeNumberPicker) findViewById(R.id.snp_implemented);
+		SwipeNumberPicker custom = (SwipeNumberPicker) findViewById(R.id.snp_custom);
+
+		final TextView result1 = (TextView) findViewById(R.id.tv_result_1);
+		final TextView result2 = (TextView) findViewById(R.id.tv_result_2);
+		result2.setText(Integer.toString(custom.getValue()));
+
 		swipeNumberPicker.setOnValueChangeListener(new OnValueChangeListener() {
 			@Override
 			public boolean onValueChange(SwipeNumberPicker view, int oldValue, int newValue) {
-				return (newValue & 1) == 0;
+				boolean isValueOk = (newValue & 1) == 0;
+
+				if (isValueOk)
+					result1.setText(Integer.toString(newValue));
+
+				return isValueOk;
 			}
 		});
 		swipeNumberPicker.setShowNumberPickerDialog(false);
 		swipeNumberPicker.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				((SwipeNumberPicker) v).setValue(0, false);
+				((SwipeNumberPicker) v).setValue(0, true);
 			}
 		});
 
-		((SwipeNumberPicker) findViewById(R.id.number_picker_2)).setOnValueChangeListener(new OnValueChangeListener() {
+		custom.setOnValueChangeListener(new OnValueChangeListener() {
 			@Override
 			public boolean onValueChange(SwipeNumberPicker view, int oldValue, int newValue) {
+				result2.setText(Integer.toString(newValue));
 				return true;
 			}
 		});
