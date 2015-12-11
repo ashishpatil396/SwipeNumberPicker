@@ -15,8 +15,11 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		SwipeNumberPicker swipeNumberPicker = (SwipeNumberPicker) findViewById(R.id.snp_implemented);
-		SwipeNumberPicker custom = (SwipeNumberPicker) findViewById(R.id.snp_custom);
+		final SwipeNumberPicker swipeNumberPicker = (SwipeNumberPicker) findViewById(R.id.snp_implemented);
+		final SwipeNumberPicker custom = (SwipeNumberPicker) findViewById(R.id.snp_custom);
+
+		custom.setEnabled(false);
+		swipeNumberPicker.setEnabled(false);
 
 		final TextView result1 = (TextView) findViewById(R.id.tv_result_1);
 		final TextView result2 = (TextView) findViewById(R.id.tv_result_2);
@@ -26,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public boolean onValueChange(SwipeNumberPicker view, int oldValue, int newValue) {
 				boolean isValueOk = (newValue & 1) == 0;
-
+				custom.setEnabled(true);
 				if (isValueOk)
 					result1.setText(Integer.toString(newValue));
 

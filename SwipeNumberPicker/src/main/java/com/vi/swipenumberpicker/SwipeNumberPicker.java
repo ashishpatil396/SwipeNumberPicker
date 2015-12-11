@@ -41,7 +41,7 @@ public class SwipeNumberPicker extends TextView {
 
 	private int mArrowColor;
 	private int mBackgroundColor;
-	private int mActiveTextColor;
+	private int mNumColor;
 
 	private String mDialogTitle = "";
 
@@ -92,7 +92,7 @@ public class SwipeNumberPicker extends TextView {
 
 				mArrowColor = attrs.getColor(R.styleable.SwipeNumberPicker_arrowColor, context.getResources().getColor(R.color.arrows));
 				mBackgroundColor = attrs.getColor(R.styleable.SwipeNumberPicker_backgroundColor, context.getResources().getColor(R.color.background));
-				mActiveTextColor = attrs.getColor(R.styleable.SwipeNumberPicker_numberColor, context.getResources().getColor(R.color.text));
+				mNumColor = attrs.getColor(R.styleable.SwipeNumberPicker_numberColor, context.getResources().getColor(R.color.text));
 			} finally {
 				attrs.recycle();
 			}
@@ -106,7 +106,7 @@ public class SwipeNumberPicker extends TextView {
 		setGravity(Gravity.CENTER);
 		setSingleLine(true);
 
-		setTextColor(mActiveTextColor);
+		setTextColor(mNumColor);
 		setNormalBackground();
 	}
 
@@ -304,15 +304,15 @@ public class SwipeNumberPicker extends TextView {
 	}
 
 	private void disable() {
-		customizeArrows(lightenColor(mBackgroundColor));
+		customizeArrows(lightenColor(mArrowColor));
 		customizeBackground(lightenColor(mBackgroundColor));
-		setTextColor(lightenColor(mActiveTextColor));
+		setTextColor(lightenColor(mNumColor));
 	}
 
 	private void enable() {
 		customizeArrows(mArrowColor);
 		customizeBackground(mBackgroundColor);
-		setTextColor(mActiveTextColor);
+		setTextColor(mNumColor);
 	}
 
 	@Override
