@@ -9,6 +9,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.StateListDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -34,6 +38,9 @@ public class SwipeNumberPicker extends TextView {
 	private float mStartX;
 	private float mIntermediateX;
 	private float mIntermediateValue;
+	private float mStrokeWidth;
+	private float mTextWidth;
+	private float mCornerRadius;
 
 	private int mPrimaryValue;
 	private int mMinValue;
@@ -45,7 +52,6 @@ public class SwipeNumberPicker extends TextView {
 
 	private String mDialogTitle = "";
 
-	private boolean mIsEnabled = true;
 	private boolean mIsShowNumberPickerDialog = true;
 
 	private AlertDialog numberPickerDialog;
@@ -62,23 +68,9 @@ public class SwipeNumberPicker extends TextView {
 
 	private void init(Context context, AttributeSet attributeSet) {
 		initAttributes(context, attributeSet);
-
-		Drawable left = getDrawable(R.drawable.ic_arrow_left);
-		Drawable right = getDrawable(R.drawable.ic_arrow_right);
-
-		setCompoundDrawablesWithIntrinsicBounds(left, null, right, null);
-		setBackgroundResource(R.drawable.bg_btn_default);
-
 		float scale = getResources().getDisplayMetrics().density;
 		mGestureStepPx = (int) (GESTURE_STEP_DP * scale + 0.5f);
-
-		Paint textPaint = new Paint();
-		textPaint.setTextSize(getTextSize());
-		setMinWidth((int) (textPaint.measureText(Integer.toString(mMaxValue)) + left.getBounds().width() * 2));
-
-		mIntermediateValue = mPrimaryValue;
-		changeValue(mPrimaryValue);
-		customizeTextView();
+		customize();
 	}
 
 	private void initAttributes(Context context, AttributeSet attributeSet) {
@@ -97,22 +89,42 @@ public class SwipeNumberPicker extends TextView {
 				attrs.recycle();
 			}
 		}
+
+		mCornerRadius = context.getResources().getDimension(R.dimen.radius);
+		mStrokeWidth = context.getResources().getDimension(R.dimen.stroke_width);
+
+		Paint textPaint = new Paint();
+		textPaint.setTextSize(getTextSize());
+		mTextWidth = textPaint.measureText(Integer.toString(mMaxValue));
 	}
 
-	private void customizeTextView() {
-		int horizontalPadding = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getContext().getResources().getDisplayMetrics());
-		setPadding(0, horizontalPadding, 0, horizontalPadding);
+	private void customize() {
+		Drawable left = getDrawableCompat(R.drawable.ic_arrow_left);
+		Drawable right = getDrawableCompat(R.drawable.ic_arrow_right);
 
+		setCompoundDrawablesWithIntrinsicBounds(left, null, right, null);
+		setBackgroundCompat(createBackgroundStateList());
 		setGravity(Gravity.CENTER);
 		setSingleLine(true);
-
 		setTextColor(mNumColor);
 		setNormalBackground();
+
+		mIntermediateValue = mPrimaryValue;
+		changeValue(mPrimaryValue);
+	}
+
+
+	@Override
+	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+		Drawable arrow = getCompoundDrawables()[0];
+		setMinWidth((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, mTextWidth + arrow.getBounds().width() * 2, getContext().getResources().getDisplayMetrics()));
+		setMinHeight((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, arrow.getBounds().height() * 1.5f, getContext().getResources().getDisplayMetrics()));
 	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		if (!mIsEnabled)
+		if (!isEnabled())
 			return false;
 
 		float currentX = event.getX();
@@ -134,7 +146,7 @@ public class SwipeNumberPicker extends TextView {
 			case MotionEvent.ACTION_MOVE:
 				if (Math.abs(currentX - mStartX) > mGestureStepPx) {
 					float distance = currentX - mIntermediateX;
-					setPressed((int) distance);
+					highlightArrows(distance);
 					double swipedDistance = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, Math.abs(distance), getContext().getResources().getDisplayMetrics());
 					float threshold;
 					if (swipedDistance < 25) {
@@ -194,8 +206,7 @@ public class SwipeNumberPicker extends TextView {
 			value = value < mMinValue ? mMinValue : mMaxValue;
 			mIntermediateValue = value;
 		}
-		String result = Integer.toString(value);
-		setText(result);
+		setText(String.valueOf(value));
 	}
 
 	private void processClick() {
@@ -241,18 +252,31 @@ public class SwipeNumberPicker extends TextView {
 		return builder.create();
 	}
 
-	private void setPressed(int distance) {
-		highlightArrows(distance);
-		highlightBackground();
-	}
-
 	private void setNormalBackground() {
-		customizeBackground(mBackgroundColor);
+		setPressed(false);
 		customizeArrows(mArrowColor);
 	}
 
-	private void customizeBackground(int color) {
-		setColorFilter(getBackground(), color);
+	private StateListDrawable createBackgroundStateList() {
+		StateListDrawable drawable = new StateListDrawable();
+		drawable.addState(new int[]{-android.R.attr.state_enabled}, createBackgroundDrawable(lightenColor(mBackgroundColor)));
+		drawable.addState(new int[]{android.R.attr.state_pressed}, createBackgroundDrawable(darkenColor(mBackgroundColor)));
+		drawable.addState(new int[]{}, createBackgroundDrawable(mBackgroundColor));
+		return drawable;
+	}
+
+	private Drawable createBackgroundDrawable(int color) {
+		ShapeDrawable backgroundDrawable = new ShapeDrawable(new RoundRectShape(new float[]{mCornerRadius, mCornerRadius, mCornerRadius, mCornerRadius, mCornerRadius, mCornerRadius, mCornerRadius, mCornerRadius}, null, null));
+		final Paint paint = backgroundDrawable.getPaint();
+		paint.setAntiAlias(true);
+		paint.setStyle(Paint.Style.FILL_AND_STROKE);
+		paint.setColor(color);
+		paint.setStrokeWidth(mStrokeWidth);
+		Drawable[] layers = {backgroundDrawable};
+		LayerDrawable drawable = new LayerDrawable(layers);
+		int halfStrokeWidth = (int) (mStrokeWidth / 2f);
+		drawable.setLayerInset(0, halfStrokeWidth, halfStrokeWidth, halfStrokeWidth, halfStrokeWidth);
+		return drawable;
 	}
 
 	private void customizeArrows(int color) {
@@ -261,10 +285,11 @@ public class SwipeNumberPicker extends TextView {
 	}
 
 	private void highlightBackground() {
-		setColorFilter(getBackground(), darkenColor(mBackgroundColor));
+		setPressed(true);
 	}
 
-	private void highlightArrows(int distance) {
+	private void highlightArrows(float distance) {
+		setPressed(true);
 		if (distance < 0) {
 			// Highlight right arrow
 			setColorFilter(getCompoundDrawables()[0], darkenColor(mArrowColor));
@@ -282,54 +307,64 @@ public class SwipeNumberPicker extends TextView {
 
 
 	private int darkenColor(int color) {
-		return adjustColorBrightness(color, 0.9f);
+		float factor = 0.9f;
+		int r = Color.red(color);
+		int g = Color.green(color);
+		int b = Color.blue(color);
+		return Color.argb(Color.alpha(color),
+				Math.max((int) (r * factor), 0),
+				Math.max((int) (g * factor), 0),
+				Math.max((int) (b * factor), 0));
 	}
 
 	private int lightenColor(int color) {
-		return adjustColorBrightness(color, 1.1f);
-	}
+		float factor = 0.3f;
+		int r = Color.red(color);
+		int g = Color.green(color);
+		int b = Color.blue(color);
+		return Color.argb(Color.alpha(color),
+				(int) ((r * (1 - factor) / 255 + factor) * 255),
+				(int) ((g * (1 - factor) / 255 + factor) * 255),
+				(int) ((b * (1 - factor) / 255 + factor) * 255));
 
-	private int adjustColorBrightness(int color, float factor) {
-		float[] hsv = new float[3];
-		Color.colorToHSV(color, hsv);
-		hsv[2] = Math.min(hsv[2] * factor, 1f);
-		return Color.HSVToColor(Color.alpha(color), hsv);
 	}
 
 	@Override
 	public void setBackgroundColor(int color) {
 		mBackgroundColor = color;
-		customizeBackground(mBackgroundColor);
-
-	}
-
-	private void disable() {
-		customizeArrows(lightenColor(mArrowColor));
-		customizeBackground(lightenColor(mBackgroundColor));
-		setTextColor(lightenColor(mNumColor));
-	}
-
-	private void enable() {
-		customizeArrows(mArrowColor);
-		customizeBackground(mBackgroundColor);
-		setTextColor(mNumColor);
+		setBackgroundCompat(createBackgroundStateList());
 	}
 
 	@Override
 	public void setEnabled(boolean enabled) {
-		this.mIsEnabled = enabled;
-		if (enabled)
-			enable();
-		else
-			disable();
+		super.setEnabled(enabled);
+
+		int arrowColor = mArrowColor;
+		int numColor = mNumColor;
+		if (!enabled) {
+			arrowColor = lightenColor(mArrowColor);
+			numColor = lightenColor(mNumColor);
+		}
+		customizeArrows(arrowColor);
+		setTextColor(numColor);
 	}
 
+	@SuppressWarnings("deprecation")
 	@TargetApi(Build.VERSION_CODES.LOLLIPOP)
-	private Drawable getDrawable(int resource) {
+	private Drawable getDrawableCompat(int resource) {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			return getContext().getResources().getDrawable(resource, null);
 		}
 		return getContext().getResources().getDrawable(resource);
+	}
+
+	@SuppressWarnings("deprecation")
+	private void setBackgroundCompat(Drawable drawable) {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+			setBackground(drawable);
+		} else {
+			setBackgroundDrawable(drawable);
+		}
 	}
 
 	public void setArrowColor(int mArrowColor) {

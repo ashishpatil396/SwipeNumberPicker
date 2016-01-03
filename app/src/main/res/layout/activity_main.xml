@@ -31,7 +31,6 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_below="@id/tv_default_lbl"
-		android:layout_column="1"
 		android:layout_gravity="center_vertical"
 		android:layout_toEndOf="@id/tv_hello"
 		android:layout_toRightOf="@id/tv_hello"/>
