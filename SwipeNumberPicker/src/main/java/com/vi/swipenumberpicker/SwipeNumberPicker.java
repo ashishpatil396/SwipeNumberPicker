@@ -129,12 +129,6 @@ public class SwipeNumberPicker extends TextView {
 
 		float currentX = event.getX();
 
-		// if (currentY < - mGestureStepPx || currentY > getHeight() +
-		// mGestureStepPx) {
-		// // Touch is outside of the height.
-		// return false;
-		// }
-
 		switch (event.getAction()) {
 
 			case MotionEvent.ACTION_DOWN:
@@ -184,7 +178,6 @@ public class SwipeNumberPicker extends TextView {
 				setNormalBackground();
 				return false;
 		}
-
 		return true;
 	}
 
@@ -215,7 +208,6 @@ public class SwipeNumberPicker extends TextView {
 		else
 			performClick();
 	}
-
 
 	public void showNumberPickerDialog() {
 		if (numberPickerDialog != null && numberPickerDialog.isShowing())
@@ -302,6 +294,8 @@ public class SwipeNumberPicker extends TextView {
 	}
 
 	private void setColorFilter(Drawable drawable, int color) {
+		if (drawable == null) return;
+
 		drawable.mutate().setColorFilter(color, PorterDuff.Mode.SRC_IN);
 	}
 
@@ -367,22 +361,9 @@ public class SwipeNumberPicker extends TextView {
 		}
 	}
 
-	public void setArrowColor(int mArrowColor) {
-		this.mArrowColor = mArrowColor;
-		customizeArrows(mArrowColor);
-	}
-
-	public void setOnValueChangeListener(OnValueChangeListener valueChangeListener) {
-		mOnValueChangeListener = valueChangeListener;
-	}
-
 	private void setValue(int value) {
 		mPrimaryValue = value;
 		mIntermediateValue = value;
-	}
-
-	public int getValue() {
-		return mPrimaryValue;
 	}
 
 	public void setValue(int value, boolean isNotifyListener) {
@@ -392,12 +373,17 @@ public class SwipeNumberPicker extends TextView {
 			notifyListener(value);
 	}
 
-	public void setMinValue(int minValue) {
-		mMinValue = minValue;
+	public void setArrowColor(int mArrowColor) {
+		this.mArrowColor = mArrowColor;
+		customizeArrows(mArrowColor);
 	}
 
-	public void setMaxValue(int maxValue) {
-		mMaxValue = maxValue;
+	public void setOnValueChangeListener(OnValueChangeListener valueChangeListener) {
+		mOnValueChangeListener = valueChangeListener;
+	}
+
+	public int getValue() {
+		return mPrimaryValue;
 	}
 
 	public void setNumberPickerDialogTitle(String title) {
@@ -406,5 +392,21 @@ public class SwipeNumberPicker extends TextView {
 
 	public void setShowNumberPickerDialog(boolean isShowNumberPickerDialog) {
 		mIsShowNumberPickerDialog = isShowNumberPickerDialog;
+	}
+
+	public int getMinValue() {
+		return mMinValue;
+	}
+
+	public void setMinValue(int minValue) {
+		mMinValue = minValue;
+	}
+
+	public int getMaxValue() {
+		return mMaxValue;
+	}
+
+	public void setMaxValue(int maxValue) {
+		mMaxValue = maxValue;
 	}
 }

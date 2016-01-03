@@ -1,104 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-				xmlns:snp="http://schemas.android.com/apk/res-auto"
-				xmlns:tools="http://schemas.android.com/tools"
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:paddingBottom="@dimen/activity_vertical_margin"
-				android:paddingLeft="@dimen/activity_horizontal_margin"
-				android:paddingRight="@dimen/activity_horizontal_margin"
-				android:paddingTop="@dimen/activity_vertical_margin"
-				tools:context=".MainActivity">
+                xmlns:snp="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                tools:context=".MainActivity">
 
-	<TextView
-		android:id="@+id/tv_hello"
-		android:layout_width="160dp"
-		android:layout_height="wrap_content"
-		android:text="Hello World!"/>
-
-
-	<TextView
-		android:id="@+id/tv_default_lbl"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/tv_hello"
-		android:layout_marginTop="@dimen/activity_horizontal_margin"
-		android:text="Default:"
-		android:textAppearance="?android:textAppearanceMedium"/>
-
-	<com.vi.swipenumberpicker.SwipeNumberPicker
-		android:id="@+id/snp_default"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/tv_default_lbl"
-		android:layout_gravity="center_vertical"
-		android:layout_toEndOf="@id/tv_hello"
-		android:layout_toRightOf="@id/tv_hello"/>
+    <TextView
+        android:id="@+id/tv_hello"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"/>
 
 
-	<TextView
-		android:id="@+id/tv_implemented_lbl"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignEnd="@id/tv_hello"
-		android:layout_alignRight="@id/tv_hello"
-		android:layout_below="@id/snp_default"
-		android:lines="2"
-		android:text="Implemented listener:"
-		android:textAppearance="?android:textAppearanceMedium"/>
+    <TextView
+        android:id="@+id/tv_default_lbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_hello"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:text="Default:"
+        android:textAppearance="?android:textAppearanceMedium"/>
+
+    <com.vi.swipenumberpicker.SwipeNumberPicker
+        android:id="@+id/snp_default"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_default_lbl"
+        android:layout_gravity="center_vertical"
+        android:layout_toEndOf="@id/tv_hello"
+        android:layout_toRightOf="@id/tv_hello"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/snp_default"
+        android:layout_alignBottom="@id/snp_default"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="0"
+        android:textAppearance="?android:textAppearanceMedium"/>
 
 
-	<com.vi.swipenumberpicker.SwipeNumberPicker
-		android:id="@+id/snp_implemented"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/tv_implemented_lbl"
-		android:layout_toEndOf="@id/tv_hello"
-		android:layout_toRightOf="@id/tv_hello"
-		snp:arrowColor="@color/colorPrimary"
-		snp:numberColor="@color/colorPrimaryDark"/>
-
-	<TextView
-		android:id="@+id/tv_result_1"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignBaseline="@id/snp_implemented"
-		android:layout_alignBottom="@id/snp_implemented"
-		android:layout_alignParentEnd="true"
-		android:layout_alignParentRight="true"
-		android:textAppearance="?android:textAppearanceMedium"/>
-
-	<TextView
-		android:id="@+id/tv_custom_lbl"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/snp_implemented"
-		android:lines="2"
-		android:text="Custom:"
-		android:textAppearance="?android:textAppearanceMedium"/>
+    <TextView
+        android:id="@+id/tv_implemented_lbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@id/tv_hello"
+        android:layout_alignRight="@id/tv_hello"
+        android:layout_below="@id/snp_default"
+        android:lines="2"
+        android:text="Implemented listener:"
+        android:textAppearance="?android:textAppearanceMedium"/>
 
 
-	<com.vi.swipenumberpicker.SwipeNumberPicker
-		android:id="@+id/snp_custom"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_below="@id/tv_custom_lbl"
-		android:layout_toEndOf="@id/tv_hello"
-		android:layout_toRightOf="@id/tv_hello"
-		snp:arrowColor="@android:color/white"
-		snp:backgroundColor="@color/colorAccent"
-		snp:max="1000"
-		snp:min="50"
-		snp:numberColor="@android:color/white"
-		snp:value="95"/>
+    <com.vi.swipenumberpicker.SwipeNumberPicker
+        android:id="@+id/snp_implemented"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_implemented_lbl"
+        android:layout_toEndOf="@id/tv_hello"
+        android:layout_toRightOf="@id/tv_hello"
+        snp:arrowColor="@color/colorPrimary"
+        snp:numberColor="@color/colorPrimaryDark"/>
 
-	<TextView
-		android:id="@+id/tv_result_2"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignBaseline="@id/snp_custom"
-		android:layout_alignBottom="@id/snp_custom"
-		android:layout_alignParentEnd="true"
-		android:layout_alignParentRight="true"
-		android:textAppearance="?android:textAppearanceMedium"/>
+    <TextView
+        android:id="@+id/tv_result_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/snp_implemented"
+        android:layout_alignBottom="@id/snp_implemented"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="0"
+        android:textAppearance="?android:textAppearanceMedium"/>
+
+    <TextView
+        android:id="@+id/tv_custom_lbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/snp_implemented"
+        android:lines="2"
+        android:text="Custom:"
+        android:textAppearance="?android:textAppearanceMedium"/>
+
+
+    <com.vi.swipenumberpicker.SwipeNumberPicker
+        android:id="@+id/snp_custom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_custom_lbl"
+        android:layout_toEndOf="@id/tv_hello"
+        android:layout_toRightOf="@id/tv_hello"
+        snp:arrowColor="@android:color/white"
+        snp:backgroundColor="@color/colorAccent"
+        snp:max="1000"
+        snp:min="50"
+        snp:numberColor="@android:color/white"
+        snp:value="95"/>
+
+    <TextView
+        android:id="@+id/tv_result_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/snp_custom"
+        android:layout_alignBottom="@id/snp_custom"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:textAppearance="?android:textAppearanceMedium"/>
 </RelativeLayout>

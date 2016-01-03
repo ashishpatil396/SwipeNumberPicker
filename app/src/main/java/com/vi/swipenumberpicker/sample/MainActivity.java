@@ -18,11 +18,9 @@ public class MainActivity extends AppCompatActivity {
 		final SwipeNumberPicker swipeNumberPicker = (SwipeNumberPicker) findViewById(R.id.snp_implemented);
 		final SwipeNumberPicker custom = (SwipeNumberPicker) findViewById(R.id.snp_custom);
 
-//		custom.setEnabled(false);
-//		swipeNumberPicker.setEnabled(false);
 		final TextView result1 = (TextView) findViewById(R.id.tv_result_1);
 		final TextView result2 = (TextView) findViewById(R.id.tv_result_2);
-		result2.setText(Integer.toString(custom.getValue()));
+		result2.setText(String.valueOf(custom.getValue()));
 
 		swipeNumberPicker.setOnValueChangeListener(new OnValueChangeListener() {
 			@Override
@@ -46,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 		custom.setOnValueChangeListener(new OnValueChangeListener() {
 			@Override
 			public boolean onValueChange(SwipeNumberPicker view, int oldValue, int newValue) {
-				result2.setText(Integer.toString(newValue));
+				result2.setText(String.valueOf(newValue));
 				return true;
 			}
 		});
