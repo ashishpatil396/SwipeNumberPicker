@@ -2,6 +2,8 @@
 
 The library provides simple number picker. The number is selected with the swipe gesture, to right - increase, to left - decrease value. Also, by click NumberPickerDialog will be shown.
 
+  ![Demo](snp.gif)
+
 # Usage
 
 In layout:
@@ -33,10 +35,26 @@ Attributes:
 ```
 
 To set changed value implement the `OnValueChangeListener` listener and on `onValueChange` return `true`
-Also via code you can:
-- disabled/enabled NumberPickerDialog, set the dialog title. If the dialog disabled `View.OnClickListener` will be called;
-- set min, max values;
-- set value.
+
+```Java
+	swipeNumberPicker.setOnValueChangeListener(new OnValueChangeListener() {
+		@Override
+		public boolean onValueChange(SwipeNumberPicker view, int oldValue, int newValue) {
+			boolean isValueOk = (newValue & 1) == 0;
+			if (isValueOk)
+				result1.setText(Integer.toString(newValue));
+	
+			return isValueOk;
+		}
+	});
+```
+
+Also you can:
+* disable/enable NumberPickerDialog;
+* disable/enable Showing of a NumberPicker Dialog. If the dialog disabled `View.OnClickListener` will be called;
+* set the dialog title;
+* set min, max values;
+* set value.
 
 
 

@@ -26,7 +26,6 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public boolean onValueChange(SwipeNumberPicker view, int oldValue, int newValue) {
 				boolean isValueOk = (newValue & 1) == 0;
-				custom.setEnabled(true);
 				if (isValueOk)
 					result1.setText(Integer.toString(newValue));
 
