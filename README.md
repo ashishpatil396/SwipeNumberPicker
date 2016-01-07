@@ -50,7 +50,7 @@ To set changed value implement the `OnValueChangeListener` listener and on `onVa
 ```
 
 Also you can:
-* disable/enable NumberPickerDialog;
+* disable/enable SwipeNumberPicker;
 * disable/enable Showing of a NumberPicker Dialog. If the dialog disabled `View.OnClickListener` will be called;
 * set the dialog title;
 * set min, max values;
