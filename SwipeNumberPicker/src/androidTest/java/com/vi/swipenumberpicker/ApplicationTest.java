@@ -1,4 +1,4 @@
-package com.eleks.swipenumberpicker;
+package com.vi.swipenumberpicker;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
