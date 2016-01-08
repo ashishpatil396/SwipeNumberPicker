@@ -10,7 +10,7 @@ Just add the dependency to your `build.gradle`:
 
 ```groovy
 dependencies {
-    compile 'com.github.supervital:swipenumberpicker:1.0.0'
+    compile 'com.github.supervital:swipenumberpicker:1.0.1'
 }
 ```
 In layout:
