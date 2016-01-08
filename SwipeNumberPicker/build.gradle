@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
+
 android {
     compileSdkVersion 23
     buildToolsVersion '23.0.2'
@@ -17,5 +19,13 @@ android {
     productFlavors {
     }
 }
-dependencies {
+dependencies {}
+
+publish {
+    groupId = 'com.github.supervital'
+    artifactId = 'swipenumberpicker'
+    publishVersion = '0.0.8'
+    desc = 'The library provides simple number picker. The number is selected with the swipe gesture, to right - increase, to left - decrease value. Also, by click NumberPickerDialog will be shown.'
+    licences = ["Apache-2.0"]
+    website = 'https://github.com/supervital/SwipeNumberPicker'
 }
