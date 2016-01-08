@@ -6,6 +6,13 @@ The library provides simple number picker. The number is selected with the swipe
 
 # Usage
 
+Just add the dependency to your `build.gradle`:
+
+```groovy
+dependencies {
+    compile 'com.github.supervital:swipenumberpicker:1.0.0'
+}
+```
 In layout:
 
 ```xml
@@ -15,12 +22,12 @@ In layout:
 	android:layout_height="wrap_content"
 	android:layout_alignParentBottom="true"
 	android:layout_alignParentLeft="true"
-	snp:numberColor="@android:color/white"
-	snp:arrowColor="@android:color/white"
-	snp:backgroundColor="@color/colorAccent"
-	snp:max="1000"
-	snp:min="50"
-	snp:value="95"/>
+	app:numberColor="@android:color/white"
+	app:arrowColor="@android:color/white"
+	app:backgroundColor="@color/colorAccent"
+	app:max="1000"
+	app:min="50"
+	app:value="95"/>
 ```
 
 Attributes:
